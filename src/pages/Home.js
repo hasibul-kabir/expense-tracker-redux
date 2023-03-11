@@ -1,8 +1,16 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
 import Form from '../components/Form'
 import Transactions from '../components/transactions/Transactions'
+import { fetchTransactions } from '../redux/features/transactionSlice'
 
 const Home = () => {
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(fetchTransactions())
+    }, [dispatch])
+
     return (
         <div className="main">
             <div className="container">
@@ -23,4 +31,4 @@ const Home = () => {
     )
 }
 
-export default Home
+export default Home;

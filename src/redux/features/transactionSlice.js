@@ -3,36 +3,35 @@ import { addTransaction, getTransaction } from "./transactionApi"
 
 
 const initialState = {
-    transaction: [],
+    transactions: [],
     isLoading: false,
     isError: false,
     error: ''
 }
 
 //create async thunk
-const fetchTransactions = createAsyncThunk("transaction/fetchTransactions", async () => {
+export const fetchTransactions = createAsyncThunk("transaction/fetchTransactions", async () => {
     const transactions = await getTransaction();
 
     return transactions;
 })
 
-const setTransactions = createAsyncThunk("transaction/fetchTransactions", async (data) => {
+export const setTransactions = createAsyncThunk("transaction/setTransactions", async (data) => {
     const transaction = await addTransaction(data);
     return transaction;
 })
 
-const updateTransactions = createAsyncThunk("transaction/updateTransactions", async ({ id, data }) => {
+export const updateTransactions = createAsyncThunk("transaction/updateTransactions", async ({ id, data }) => {
     const transaction = await addTransaction({ id, data });
     return transaction;
 })
 
-const removeTransactions = createAsyncThunk("transaction/removeTransactions", async (id) => {
+export const removeTransactions = createAsyncThunk("transaction/removeTransactions", async (id) => {
     const transaction = await addTransaction(id);
     return transaction;
 })
 
 //reducer
-
 const transactionSlice = createSlice({
     name: 'transaction',
     initialState,
@@ -45,13 +44,13 @@ const transactionSlice = createSlice({
             .addCase(fetchTransactions.fulfilled, (state, action) => {
                 state.isLoading = false
                 state.isError = false
-                state.transaction = action.payload
+                state.transactions = action.payload
             })
             .addCase(fetchTransactions.rejected, (state, action) => {
                 state.isLoading = false
-                state.transaction = []
-                state.isError = true,
-                    state.error = action.error?.message
+                state.transactions = []
+                state.isError = true
+                state.error = action.error?.message
             })
             //add
             .addCase(setTransactions.pending, (state) => {
@@ -60,7 +59,7 @@ const transactionSlice = createSlice({
             })
             .addCase(setTransactions.fulfilled, (state, action) => {
                 state.isLoading = false
-                state.transaction.push(action.payload)
+                state.transactions.push(action.payload)
             })
             .addCase(setTransactions.rejected, (state, action) => {
                 state.isLoading = false
@@ -75,10 +74,9 @@ const transactionSlice = createSlice({
             .addCase(updateTransactions.fulfilled, (state, action) => {
                 state.isLoading = false
                 state.isError = false
-                const indexToUpdate = state.transaction.findIndex((element) => {
-                    element.id === action.payload.id
-                })
-                state.transaction[indexToUpdate] = action.payload
+                const indexToUpdate = state.transactions.findIndex((element) => element.id === action.payload.id);
+
+                state.transactions[indexToUpdate] = action.payload;
             })
             .addCase(updateTransactions.rejected, (state, action) => {
                 state.isLoading = false
@@ -93,7 +91,7 @@ const transactionSlice = createSlice({
             .addCase(removeTransactions.fulfilled, (state, action) => {
                 state.isLoading = false
                 state.isError = false
-                state.transaction = state.transaction.filter((element) => element.id !== action.meta.arg)
+                state.transactions = state.transactions.filter((element) => element.id !== action.meta.arg)
             })
             .addCase(removeTransactions.rejected, (state, action) => {
                 state.isLoading = false

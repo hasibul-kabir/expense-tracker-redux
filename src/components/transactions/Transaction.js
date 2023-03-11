@@ -1,12 +1,13 @@
-import React from 'react'
+import React from 'react';
 
-const Transaction = () => {
+const Transaction = ({ transaction }) => {
+    const { name, type, amount } = transaction || {};
     return (
         <ul>
-            <li className="transaction income">
-                <p>Earned this month</p>
+            <li className={`transaction ${type}`}>
+                <p>{name}</p>
                 <div className="right">
-                    <p>৳ 100</p>
+                    <p>৳ {amount}</p>
                     <button className="link">
                         <img
                             className="icon"
