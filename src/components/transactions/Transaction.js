@@ -8,7 +8,7 @@ const Transaction = ({ transaction }) => {
                 <p>{name}</p>
                 <div className="right">
                     <p>৳ {amount}</p>
-                    <button className="link">
+                    <button className="link" onClick={handleEdit}>
                         <img
                             className="icon"
                             src="./images/edit.svg"
