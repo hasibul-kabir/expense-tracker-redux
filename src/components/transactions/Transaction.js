@@ -1,7 +1,19 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
+import { editActive } from '../../redux/features/transactionSlice';
 
 const Transaction = ({ transaction }) => {
-    const { name, type, amount } = transaction || {};
+    const { id, name, type, amount } = transaction || {};
+    const dispatch = useDispatch();
+
+    const handleEdit = () => {
+        dispatch(editActive({
+            id,
+            name,
+            type,
+            amount
+        }))
+    }
     return (
         <ul>
             <li className={`transaction ${type}`}>

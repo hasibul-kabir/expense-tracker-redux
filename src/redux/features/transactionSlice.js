@@ -1,12 +1,13 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-import { addTransaction, getTransaction } from "./transactionApi"
+import { addTransaction, deleteTransaction, editTransaction, getTransaction } from "./transactionApi"
 
 
 const initialState = {
     transactions: [],
     isLoading: false,
     isError: false,
-    error: ''
+    error: '',
+    dataToEdit: {}
 }
 
 //create async thunk
@@ -22,12 +23,12 @@ export const setTransactions = createAsyncThunk("transaction/setTransactions", a
 })
 
 export const updateTransactions = createAsyncThunk("transaction/updateTransactions", async ({ id, data }) => {
-    const transaction = await addTransaction({ id, data });
+    const transaction = await editTransaction({ id, data });
     return transaction;
 })
 
 export const removeTransactions = createAsyncThunk("transaction/removeTransactions", async (id) => {
-    const transaction = await addTransaction(id);
+    const transaction = await deleteTransaction(id);
     return transaction;
 })
 
@@ -35,6 +36,14 @@ export const removeTransactions = createAsyncThunk("transaction/removeTransactio
 const transactionSlice = createSlice({
     name: 'transaction',
     initialState,
+    reducers: {
+        editActive: (state, action) => {
+            state.dataToEdit = action.payload;
+        },
+        editInActive: (state) => {
+            state.dataToEdit = {}
+        }
+    },
     extraReducers: (builder) => {
         builder
             .addCase(fetchTransactions.pending, (state) => {
@@ -103,3 +112,4 @@ const transactionSlice = createSlice({
 })
 
 export default transactionSlice.reducer;
+export const { editActive, editInActive } = transactionSlice.actions;
